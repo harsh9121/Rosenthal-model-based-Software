@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alloy Tool</title>
+    <style>
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+    
+        body, html {
+          height: 100%;
+          font-family: 'Arial', sans-serif;
+          background-color: #0a1128;
+          color: #e0f7fa;
+          background-image: url('static/front.gif');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-attachment: fixed;
+        }
+    
+        .header {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 20px;
+          text-align: center;
+          width: 100%;
+        }
+    
+        h1 {
+          font-size: 3rem;
+          color: #ffeb3b;
+          text-align: center;
+          margin: 0 auto;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+    
+        .container {
+          display: flex;
+          height: calc(100vh - 80px); /* Subtracting height of the header */
+          padding: 20px;
+          gap: 20px;
+        }
+    
+        .left-panel {
+          flex: 1;
+          padding: 20px;
+          border-radius: 10px;
+          background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+          overflow-y: auto;
+        }
+    
+        .right-panel {
+          flex: 1;
+          padding: 20px;
+          border-radius: 10px;
+          background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+          color: #ffd54f;
+          position: relative;
+        }
+    
+        .output-group {
+          font-size: 1.2rem;
+          margin-bottom: 35px; /* Spacing between outputs */
+        }
+    
+        .output-label {
+          display: inline-block;
+          width: 300px; /* Adjusted width for label to stay on a single line */
+        }
+    
+        .output-variable {
+          display: inline-block;
+          font-size: 1.1rem;
+          color: #e0f7fa;
+        }
+    
+        label {
+          font-size: 1.3rem; /* Larger label text */
+          margin-bottom: 5px;
+          color: #ffeb3b; /* Classy yellow */
+        }
+    
+        input[type="text"] {
+          padding: 15px; /* Increased padding */
+          font-size: 1.1rem;
+          border-radius: 10px;
+          border: none;
+          width: 100%;
+          margin-bottom: 20px; /* Increased spacing between inputs */
+          background-color: rgba(255, 255, 255, 0.2); /* Slightly lighter background */
+          color: #fff;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Classy box shadow */
+          transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effects */
+        }
+    
+        input[type="text"]:focus {
+          background-color: rgba(255, 255, 255, 0.4); /* Lighter background on focus */
+          outline: none;
+          transform: scale(1.02); /* Slight scaling effect on focus */
+        }
+    
+        /* Buttons inside the right panel */
+        .buttons-container {
+          display: flex;
+          justify-content: flex-end;
+          gap: 20px;
+          margin-bottom: 20px; /* Move buttons up */
+        }
+    
+        button {
+          padding: 10px;
+          font-size: 1rem;
+          border: none;
+          border-radius: 10px;
+          cursor: pointer;
+          width: 150px;
+          color: white;
+        }
+
+        .error-message {
+          color: red;
+          font-size: larger;
+        }
+        .manual-btn {
+          background-color: #ff7043;
+          color: #fff;
+        }
+    
+        .manual-btn:hover {
+          background-color: #ff5722;
+          transform: scale(1.05);
+        }
+    
+        .auto-btn {
+          background-color: #4caf50;
+          color: #fff;
+        }
+    
+        .auto-btn:hover {
+          background-color: #388e3c;
+          transform: scale(1.05);
+        }
+    
+      </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ALLOY DESIGN TOOL</h1>
+    </div>
+
+    <div class="container">
+        <!-- Left Panel for Inputs -->
+        <div class="left-panel">
+            <div class="form-container">
+                <form method="POST" id="inputForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="Annealing_Temperature">Annealing Temperature (K):</label>
+                        <input type="text" name="Annealing_Temperature" placeholder="Enter annealing temperature" value="{{ form_data.Annealing_Temperature }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Carbon_Content">Carbon Content (%):</label>
+                        <input type="text" name="Carbon_Content" placeholder="Enter carbon content" value="{{ form_data.Carbon_Content }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Manganese_Content">Manganese Content (%):</label>
+                        <input type="text" name="Manganese_Content" placeholder="Enter manganese content" value="{{ form_data.Manganese_Content }}" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="Laser_Power">Laser Power (W):</label>
+                      <input type="text" id="Laser_Power" name="Laser_Power" placeholder="Enter laser power" value="{{ form_data.Laser_Power }}" required>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="Thermal_Conductivity">Thermal Conductivity (W/mK):</label>
+                      <input type="text" id="Thermal_Conductivity" name="Thermal_Conductivity" placeholder="Enter thermal conductivity" value="{{ form_data.Thermal_Conductivity }}" required>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="Scan_Speed">Scan Speed (m/s):</label>
+                      <input type="text" id="Scan_Speed" name="Scan_Speed" placeholder="Enter scan speed" value="{{ form_data.Scan_Speed }}" required>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="Density">Density (kg/m³):</label>
+                      <input type="text" id="Density" name="Density" placeholder="Enter material density" value="{{ form_data.Density }}" required>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="Specific_Heat">Specific Heat (J/kgK):</label>
+                      <input type="text" id="Specific_Heat" name="Specific_Heat" placeholder="Enter specific heat" value="{{ form_data.Specific_Heat }}" required>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="Powder_Layer_Thickness">Powder Layer Thickness (m):</label>
+                      <input type="text" id="Powder_Layer_Thickness" name="Powder_Layer_Thickness" placeholder="Enter powder thickness" value="{{ form_data.Powder_Layer_Thickness }}" required>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="Initial_Temperature">Initial Temperature (K):</label>
+                      <input type="text" id="Initial_Temperature" name="Initial_Temperature" placeholder="Enter initial temperature" value="{{ form_data.Initial_Temperature }}" required>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="Melting_Point">Melting Point (K):</label>
+                      <input type="text" id="Melting_Point" name="Melting_Point" placeholder="Enter melting point" value="{{ form_data.Melting_Point }}" required>
+                  </div>
+                    <!-- <button class="manual-btn" type="submit">Manual Compute</button> -->
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Panel for Outputs -->
+        <div class="right-panel">
+            <div class="buttons-container">
+                <button class="manual-btn" type="submit" form="inputForm">Manual Compute</button>
+            </div>
+            {% if result.valid == False %}
+            <div class="error-message">
+                <span>Error: {{ result.error }}</span>  <!-- Display error message -->
+            </div>
+            {% endif %}
+            <div class="output-container">
+                <!-- Retained Austenite Fraction -->
+                <div class="output-group">
+                    <span>Retained Austenite Fraction (%): {{ result.austeniteFraction|default_if_none:"" }}</span>
+                </div>
+            
+                <!-- Melt Pool Dimensions -->
+                <div class="output-group">
+                    <span>Melt Pool Dimensions: {{ result.meltPoolDimensions|default_if_none:"" }}</span>
+                </div>
+            
+                <!-- Printability Condition -->
+                <div class="output-group">
+                    <span>Printability Condition: {{ result.printabilityCondition|default_if_none:"" }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
