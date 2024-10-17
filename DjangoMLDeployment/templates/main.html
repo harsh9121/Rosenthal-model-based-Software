@@ -165,38 +165,18 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="Carbon_Content">Carbon Content (%):</label>
+                        <label for="Carbon_Content">Carbon Content (mole fraction):</label>
                         <input type="text" name="Carbon_Content" placeholder="Enter carbon content" value="{{ form_data.Carbon_Content }}" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="Manganese_Content">Manganese Content (%):</label>
+                        <label for="Manganese_Content">Manganese Content (mole fraction):</label>
                         <input type="text" name="Manganese_Content" placeholder="Enter manganese content" value="{{ form_data.Manganese_Content }}" required>
                     </div>
 
                     <div class="form-group">
                       <label for="Laser_Power">Laser Power (W):</label>
                       <input type="text" id="Laser_Power" name="Laser_Power" placeholder="Enter laser power" value="{{ form_data.Laser_Power }}" required>
-                  </div>
-
-                  <div class="form-group">
-                      <label for="Thermal_Conductivity">Thermal Conductivity (W/mK):</label>
-                      <input type="text" id="Thermal_Conductivity" name="Thermal_Conductivity" placeholder="Enter thermal conductivity" value="{{ form_data.Thermal_Conductivity }}" required>
-                  </div>
-
-                  <div class="form-group">
-                      <label for="Scan_Speed">Scan Speed (m/s):</label>
-                      <input type="text" id="Scan_Speed" name="Scan_Speed" placeholder="Enter scan speed" value="{{ form_data.Scan_Speed }}" required>
-                  </div>
-
-                  <div class="form-group">
-                      <label for="Density">Density (kg/m³):</label>
-                      <input type="text" id="Density" name="Density" placeholder="Enter material density" value="{{ form_data.Density }}" required>
-                  </div>
-
-                  <div class="form-group">
-                      <label for="Specific_Heat">Specific Heat (J/kgK):</label>
-                      <input type="text" id="Specific_Heat" name="Specific_Heat" placeholder="Enter specific heat" value="{{ form_data.Specific_Heat }}" required>
                   </div>
 
                   <div class="form-group">
@@ -220,31 +200,35 @@
 
         <!-- Right Panel for Outputs -->
         <div class="right-panel">
-            <div class="buttons-container">
-                <button class="manual-btn" type="submit" form="inputForm">Manual Compute</button>
-            </div>
-            {% if result.valid == False %}
-            <div class="error-message">
-                <span>Error: {{ result.error }}</span>  <!-- Display error message -->
-            </div>
-            {% endif %}
-            <div class="output-container">
-                <!-- Retained Austenite Fraction -->
-                <div class="output-group">
-                    <span>Retained Austenite Fraction (%): {{ result.austeniteFraction|default_if_none:"" }}</span>
-                </div>
-            
-                <!-- Melt Pool Dimensions -->
-                <div class="output-group">
-                    <span>Melt Pool Dimensions: {{ result.meltPoolDimensions|default_if_none:"" }}</span>
-                </div>
-            
-                <!-- Printability Condition -->
-                <div class="output-group">
-                    <span>Printability Condition: {{ result.printabilityCondition|default_if_none:"" }}</span>
-                </div>
-            </div>
-        </div>
+          <div class="buttons-container">
+              <button class="manual-btn" type="submit" form="inputForm">Compute</button>
+          </div>
+      
+          <!-- Display error message if result is not valid and there's an error message -->
+          {% if not result.valid and result.error %}
+          <div class="error-message">
+              <span style="color: red;">Error: {{ result.error }}</span>  <!-- Display error message -->
+          </div>
+          {% endif %}
+      
+          <!-- Display output results only if they are available -->
+          <div class="output-container">
+              <!-- Retained Austenite Fraction -->
+              <div class="output-group">
+                  <span>Retained Austenite Fraction (%): {{ result.austeniteFraction|default_if_none:"Not Available" }}</span>
+              </div>
+      
+              <!-- Melt Pool Dimensions -->
+              <div class="output-group">
+                  <span>Melt Pool Dimensions: {{ result.meltPoolDimensions|default_if_none:"Not Available" }}</span>
+              </div>
+      
+              <!-- Printability Condition -->
+              <div class="output-group">
+                  <span>Printability Condition: {{ result.printabilityCondition|default_if_none:"Not Available" }}</span>
+              </div>
+          </div>
+      </div>        
     </div>
 </body>
 </html>
